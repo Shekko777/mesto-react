@@ -1,0 +1,7 @@
+.popup-images__figcaption {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--white-color);
+  align-self: start;
+}

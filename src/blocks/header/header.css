@@ -1,0 +1,7 @@
+.header {
+  max-width: 880px;
+  width: 100vw;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+  box-sizing: border-box;
+}

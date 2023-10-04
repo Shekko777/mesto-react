@@ -1,0 +1,16 @@
+.profile__wrapper {
+  padding: 40px 0 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+  .profile__wrapper {
+    flex-direction: column;
+    justify-content: center;
+    gap: 29px;
+    padding-bottom: 36px;
+  }
+}
