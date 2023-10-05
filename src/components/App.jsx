@@ -8,7 +8,7 @@ import PopupEditProfile from './PopupEditProfile';
 import PopupAddNewCard from "./PopupAddNewCard";
 import PopupWithConfirm from './PopupWithConfirm';
 import PopupEditAvatar from './PopupEditAvatar';
-import api from '../utils/api';
+import api from '../utils/Api'
 
 function App() {
   /* Стейт разных переменных */
