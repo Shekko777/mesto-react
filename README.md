@@ -1,4 +1,4 @@
-<h1 align="center">Проект <a style="color: #4285B4;" href="https://daniilshat.ru/" target="_blank">mesto-react</a> 
+<h1 align="center">Проект <a style="color: #4285B4;" href="https://shekko777.github.io/mesto-react/" target="_blank">mesto-react</a> 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&width=435&lines=click+here+to+view+the+web-site" alt="Typing SVG" style="height: 30px" />
 
 ---
