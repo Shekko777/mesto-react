@@ -3,7 +3,7 @@
 
 ---
 
-<div align="center" ><img src="./src/images/readme/main.jpg" width="580" /></div>
+<div align="center" ><img src="./src/images/README/main.jpg" width="580" /></div>
 
 <div align="center">
 
@@ -92,19 +92,19 @@ npm run start
 
   <h4>Настройка собственного профиля</h4>
 
-<img src="./src/images/readme/profile.jpg" width="500" />
+<img src="./src/images/README/profile.jpg" width="500" />
 
 <h4>Обновление аватара</h4>
 
-<img src="./src/images/readme/avatar.jpg" width="500" />
+<img src="./src/images/README/avatar.jpg" width="500" />
 
 <h4>Обновление профиля</h4>
 
-<img src="./src/images/readme/editProfile.jpg" width="500" />
+<img src="./src/images/README/editProfile.jpg" width="500" />
 
 <h4>Добавление нового места</h4>
 
-<img src="./src/images/readme/addNewMesto.jpg" width="500" />
+<img src="./src/images/README/addNewMesto.jpg" width="500" />
 </div>
 
 <h3 style="opacity: 0.3;">© Created by Shekko.</h3>
