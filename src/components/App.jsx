@@ -27,22 +27,22 @@ function App() {
 
   /* Функция открытия попапа аватара */
   function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+    setIsEditAvatarPopupOpen(true);
   }
   
   /*Функиця открытия попапа профиля*/
   function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+    setIsEditProfilePopupOpen(true);
   }
   
   /*Функция открытия попапа добавления карточки*/
   function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
+    setIsAddPlacePopupOpen(true)
   }
 
   /* Функция открытия попапа подтверждения действий*/
   function handleConfirmPopup() {
-    setIsConfirmPopup(!isConfirmPopup);
+    setIsConfirmPopup(true);
   }
 
   /* Функция закрытия попапов и сброса стейтов */
