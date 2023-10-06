@@ -1,5 +1,4 @@
 import React from 'react';
-import "../App.css";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -71,7 +70,7 @@ function App() {
       setUserAvatar(dataUser.avatar);
 
       setCards(dataCards)
-    })
+    }).catch(err => console.log(`Oops: Не удалось получить данные, ошибка: ${err}`))
   }, []);
 
   return (
