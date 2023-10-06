@@ -1,4 +1,4 @@
-<h1 align="center">Проект <a style="color: #4285B4;" href="https://shekko777.github.io/mesto-react/" target="_blank">mesto-react</a> 
+  <h1 align="center">Проект <a style="color: #4285B4;" href="https://shekko777.github.io/mesto-react/" target="_blank">mesto-react</a> 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&width=435&lines=click+here+to+view+the+web-site" alt="Typing SVG" style="height: 30px" />
 
 ---
@@ -13,13 +13,21 @@
 
 ---
 
-<h2 style="color: #4285B4;" >Скачать:</h2>
+<h2 style="color: #4285B4;" >Скачать и начать:</h2>
+
+<p>Скачайте проект локально</p>
 
 ```
 git clone https://github.com/Shekko777/mesto-react.git
 ```
 
-<p>Включить локальный сервер в проекте:</p>
+<p>Установите пакет зависимостей</p>
+
+```
+  npm i
+```
+
+<p>Включите локальный сервер в проекте:</p>
 
 ```
 npm run start
@@ -37,7 +45,7 @@ npm run start
 
 <div style="display: flex; align-items: start; margin-bottom: 20px;"><h2 style="color: #4285B4; display: inline; margin-right: 20px;">Работа с кодом:</h2> <img src="https://media.giphy.com/media/ptqAPgghLtHOa0SLJS/giphy.gif" height="100" /> </div>
 
-<p style="width: 600px; font-weight: 500">1. Для добавления различных форм используется функциональный компонент общей формы:</p>
+<p style="width: 600px; font-weight: 500">1. Для добавления форм используется функциональный компонент общей формы:</p>
 
 ```
   <PopupWithForm name={name} title={title} buttonText={buttonText} isOpen={isOpen} isClose={isClose}>
@@ -51,7 +59,7 @@ npm run start
 
 ```
 
-<p style="width: 600px; font-weight: 500">2. Для передачи различных состояний используется стейт из коробки React:</p>
+<p style="width: 600px; font-weight: 500">2. Для передачи состояний используется стейт из коробки React:</p>
 
 ```
   const [active, setActive] = React.useState(false);
