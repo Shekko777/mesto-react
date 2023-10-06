@@ -36,7 +36,7 @@ class Api {
         name: name,
         about: about,
       }),
-    });
+    }).then(this._getResponce);
   }
 
   // Добавить новую карточку на сервер.
@@ -56,7 +56,7 @@ class Api {
     return fetch(`${this._url}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers,
-    });
+    }).then(this._getResponce);
   }
 
   // Смена аватара.
