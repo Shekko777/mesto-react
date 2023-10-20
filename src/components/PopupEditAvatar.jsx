@@ -8,6 +8,10 @@ export default function PopupEditAvatar({name, title, buttonText, isOpen, isClos
   const [linkError, setLinkError] = React.useState('Вставьте ссылку на аватар');
   const [formValid, setFormValid] = React.useState(false);
 
+  /*
+  Хук сбрасывания формы до дефолта, когда открывается попап.
+  Чтобы сбросить текст, ошибку, и заблочить кнопку
+  */
   useEffect(() => {
     setUserAvatar('')
     setLinkDirty(false)
@@ -15,6 +19,10 @@ export default function PopupEditAvatar({name, title, buttonText, isOpen, isClos
     setFormValid(false)
   }, [isOpen])
 
+  /*
+  Хук для определения валидности формы, когда пользователь ввёл/вводит данные.
+  Если инпут ссылки содержит текст (Тоесть true), то форма невалидна, кнопка заблокируется.
+  */
   useEffect(() => {
     if(linkError) {
       setFormValid(false)
@@ -23,26 +31,42 @@ export default function PopupEditAvatar({name, title, buttonText, isOpen, isClos
     }
   }, [linkError])
 
-  function onChangeUserAvatar(e) {
-    setUserAvatar(e.target.value);
+  /*
+  Определяет, ушел ли пользователь с инпута.
+  Если инпут не заполнен, и пользователь ушел с него, то всплывет ошибка.
+  */ 
+  function blurInput() {
+    setLinkDirty(true);
+  }
 
+  /*Управления инпута ссылки*/
+  function onChangeUserAvatar(evt) {
+    setUserAvatar(evt.target.value);
+    /*
+    re - переменная регулярного выражения
+    Если в инпуте не будет символов из re, или она не прошла по длине строки
+    то инпут невалиден 
+    */
     const re = /(https?:\/\/.*\.(?:png|jpg))/i;
-    if(!re.test(String(e.target.value)) && e.target.value.length >= 1) {
+    if(!re.test(String(evt.target.value)) && evt.target.value.length >= 1) {
       setLinkError('Некорректная ссылка аватара');
       setLinkDirty(true)
-    } else if (e.target.value.length < 1) {
+    } else if (evt.target.value.length < 1) {
       setLinkError('Вставьте ссылку на аватар')
     } else {
       setLinkError('')
     }
   }
 
-  function blurInput() {
-    setLinkDirty(true);
-  }
-
+ 
+  /*Отправка формы*/ 
   function handleSubmit(evt) {
     evt.preventDefault();
+    /*
+    Передаём через деструктуризацию линк, 
+    которым функция пользуется для отправки fetch запроса
+      link: стейт переменная ссылки аватара
+    */
     onUpdateAvatar({
       avatar: userAvatar,
     })

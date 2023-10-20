@@ -13,15 +13,18 @@ import { CardsContext } from '../contexts/CardsContext';
 
 function App() {
   /* Стейт разных переменных */
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false); 
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isConfirmPopup, setIsConfirmPopup] = React.useState(false);
-  const [isImagePopup, setIsImagePopup] = React.useState(false);
-  const [cards, setCards] = React.useState([]);
-  const [selectedCard, setSelectedCard] = React.useState(null);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false); // Попап редактирования профиля
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false); // Попап добавления места
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false); // Попап аватара 
+  const [isConfirmPopup, setIsConfirmPopup] = React.useState(false); // Попап подтверждения 
+  const [isImagePopup, setIsImagePopup] = React.useState(false); // Попап картинки
+  const [cards, setCards] = React.useState([]); // Массив карточек для отображения
+  const [selectedCard, setSelectedCard] = React.useState(null); // Карточка для открытия попапа/удаления
 
-   /* Стейт информации о пользователе */
+   /*
+    Стейт информации о пользователе.
+    Делаю свои кастомные ключи на основе полученных.
+   */
    const [currentUser, setCurrentUser ] = React.useState({
     about: '',
     name: '',
@@ -30,6 +33,7 @@ function App() {
    });
  
 
+   /* -------- ФУНКЦИИ -------- */
   /* Функция открытия попапа аватара */
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -45,9 +49,28 @@ function App() {
     setIsAddPlacePopupOpen(true)
   }
 
-  /* Функция открытия попапа подтверждения действий*/
+  /* 
+  Функция открытия попапа подтверждения действий.
+  Получает: 
+    1) Сам попап действий
+    2) Стейт, который нужно обновить
+  */
   function handleConfirmPopup(card) {
     setIsConfirmPopup(true);
+    setSelectedCard(card);
+    
+  }
+  /*
+  Отправка попапа подтверждения. 
+  Получает 3 функции:
+    1) Сбрасывает дефолт
+    2) Функция обработчик
+    3) После срабатывания закрывает попапы 
+  */
+  function handleSubmitConfirm(evt) {
+    evt.preventDefault();
+    handleCardDelete(selectedCard);
+    handleCloseAllPopup();
   }
 
   /* Функция закрытия попапов и сброса стейтов */
@@ -60,14 +83,14 @@ function App() {
     setSelectedCard(null);
   }
 
-  // Функция закрытия на оверлей 
+  /* Функция закрытия на оверлей */  
   function handleClosePopupTouchOverlay(evt) {
     if(evt.target === evt.currentTarget) {
       handleCloseAllPopup();
     }
   }
 
-  /* Функция при клике на карточку */
+  /* Функция открытия картинки в попапе */
   function handleCardClick(card) {
     setSelectedCard(card);
     setIsImagePopup(!isImagePopup);
@@ -86,7 +109,7 @@ function App() {
   function handleCardDelete(card) {
     api.deleteCard(card._id).then(_ => {
       setCards(state => state.filter(c => c._id !== card._id))
-    })
+    }).catch(err => console.log(`Oops: не удалось удалить, ошибка ${err}`))
   }
 
   // API добавления карточки
@@ -94,10 +117,10 @@ function App() {
     api.addNewCard(link, name).then(newCard => {
       setCards([newCard, ...cards]);
       handleCloseAllPopup();
-    })
+    }).catch(err => console.log(`Oops: не удалось добавить карточку, ошибка ${err}`))
   }
 
-  // API обновление юзера
+  // API обновление информации о пользователе
   function handleUpdateUser({name, about}) {
     api.setNewUserInfo(name, about).then(dataUser => {
       setCurrentUser({
@@ -120,8 +143,12 @@ function App() {
     }).catch(err => console.log(`Oops: не удалось добавить карточку, ошибка ${err}`));
   }
 
-
-  /* Срабатывание эффектов при загрузке страницы */
+  /* -------- МОНИТРОВАНИЕ ЕФФЕКТОВ -------- */
+  /* 
+  Срабатывание эффектов при загрузке страницы
+    1) Загружается информацию о пользователе в стейт
+    2) Загружается массив карточек в стейт для их начального рендера 
+  */
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getCards()])
     .then(([dataUser, dataCards]) => {
@@ -136,22 +163,25 @@ function App() {
     }).catch(err => console.log(`Oops: Не удалось получить данные, ошибка: ${err}`))
   }, []);
 
-  // Закрытие при ESC 
+  /*
+  Монтирование еффекта
+  Если изменяется 1 из 5 попапов (открываются)
+  то функция создаст функцию закрытия по ESC, и навесит на body
+  после отрабатывания с body удалиться событие
+  */
   React.useEffect(() => {
-    if(isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopup) {
+    if(isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopup || isConfirmPopup) {
       function handleCloseAllPopupTouchESC(evt) {
         if(evt.key === 'Escape'){
           handleCloseAllPopup();
         }
       }
       document.addEventListener('keydown', handleCloseAllPopupTouchESC);
-
-
       return () => {
         document.removeEventListener('keydown', handleCloseAllPopupTouchESC);
       }
     }
-  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopup])
+  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopup, isConfirmPopup])
 
 
 
@@ -169,7 +199,7 @@ function App() {
           onEditAvatar={handleEditAvatarClick} 
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onConfirmDelete={handleConfirmPopup}
           />
 
           {/*  FOOTER */}
@@ -181,8 +211,8 @@ function App() {
           {/* Попап добавления карточек */}
           <PopupAddNewCard closeTouchOverlay={handleClosePopupTouchOverlay} onAddPlace={handleAddPlaceSubmit} name="type_add" title="Новое место" buttonText="Создать" isOpen={isAddPlacePopupOpen} isClose={handleCloseAllPopup}/>
 
-          {/* Попап удаления */}
-          <PopupWithConfirm closeTouchOverlay={handleClosePopupTouchOverlay} name="type_delete" title="Вы уверены?" buttonText='Да' isOpen={isConfirmPopup} isClose={handleCloseAllPopup}/>
+          {/* Попап подтверждения */}
+          <PopupWithConfirm onSubmit={handleSubmitConfirm} closeTouchOverlay={handleClosePopupTouchOverlay} name="type_delete" title="Вы уверены?" buttonText='Да' isOpen={isConfirmPopup} isClose={handleCloseAllPopup}/>
 
           {/* Попап аватара */}
           <PopupEditAvatar closeTouchOverlay={handleClosePopupTouchOverlay} onUpdateAvatar={handleUpdateAvatar} name="tupe_avatar" title="Обновить аватар" buttonText="Сохранить" isOpen={isEditAvatarPopupOpen} isClose={handleCloseAllPopup} />

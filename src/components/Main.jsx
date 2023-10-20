@@ -4,7 +4,7 @@ import { CardsContext } from "../contexts/CardsContext";
 import avatarPreload from "../images/profile/avatar-preload.jpg";
 import Card from './Card';
 
-function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onCardDelete}) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onConfirmDelete}) {
   const currentUserContext = React.useContext(CurrentUserContext);
   const cardsContext = React.useContext(CardsContext);
 
@@ -47,7 +47,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike,
       <section className="elements" aria-label="Фотокарточки">
         <ul className="elements__list">
           {cardsContext.map(card => {
-            return <Card key={card._id} handleButtonDelete={onCardDelete} handleLikeClick={onCardLike} onCardClick={onCardClick} card={card} />
+            return <Card key={card._id} onConfirmDelete={onConfirmDelete} handleLikeClick={onCardLike} onCardClick={onCardClick} card={card} />
         })}</ul>
       </section>
     </main>

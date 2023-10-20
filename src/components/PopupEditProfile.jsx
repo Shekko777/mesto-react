@@ -13,6 +13,10 @@ export default function PopupEditProfile({name, title, buttonText, isOpen, isClo
   const [aboutError, setAboutError] = React.useState('');
   const [formValid, setFormValid] = React.useState(false);
 
+  /*
+  Хук сбрасывания формы до дефолта, когда открывается попап.
+  Чтобы сбросить текст, ошибку, и заблочить кнопку
+  */
   React.useEffect(() => {
     setUserName(currentUserContext.name);
     setUserDescription(currentUserContext.about);
@@ -23,6 +27,10 @@ export default function PopupEditProfile({name, title, buttonText, isOpen, isClo
     setFormValid(false)
   }, [isOpen])
 
+  /*
+  Хук для определения валидности формы, когда пользователь ввёл/вводит данные.
+  Если 1 из 2 ошибок содержит текст (Тоесть true), то форма невалидна, кнопка заблокируется.
+  */
   React.useEffect(() => {
     if(nameError || aboutError) {
       setFormValid(false)
@@ -31,40 +39,53 @@ export default function PopupEditProfile({name, title, buttonText, isOpen, isClo
     }
   }, [userName, userDescription])
 
+  /*
+  Хук для получения данных о пользователе.
+  Если данные получены, то записывает их в стейт
+  */
   React.useEffect(() => {
     setUserName(currentUserContext.name);
     setUserDescription(currentUserContext.about);
   }, [currentUserContext]); 
 
-  function handleSubmit(e) {
-  e.preventDefault();
-
+  /*Функция отправки формы*/
+  function handleSubmit(evt) {
+  evt.preventDefault();
+    /*
+    Передаём через деструктуризацию имя и описание, 
+    которыми функция пользуется для отправки fetch запроса
+      name: стейт переменная имени
+      about: стейт переменная ссылки
+    */
   onUpdateUser({
     name: userName,
     about: userDescription,
   });
 } 
 
-  function handleChangeUserName(e) {
-    setUserName(e.target.value);
 
-    if(e.target.value.length > 0 && e.target.value.length < 3) {
+  // Управление инпута имени
+  function handleChangeUserName(evt) {
+    setUserName(evt.target.value);
+    // Если имя меньше положенной длины, то невалидно
+    if(evt.target.value.length > 0 && evt.target.value.length < 3) {
       setNameError('Короткое имя. Нужно не меньше 3 символов');
       setNameDirty(true);
-    } else if ( e.target.value.length == 0) {
+    } else if ( evt.target.value.length == 0) {
       setNameError('Вы пропустили поле')
     } else {
       setNameError('');
     }
   }
 
-  function handleChangeUserDescription(e) {
-    setUserDescription(e.target.value);
-
-    if(e.target.value.length > 0 && e.target.value.length < 3) {
+  // Управление инпута описания
+  function handleChangeUserDescription(evt) {
+    setUserDescription(evt.target.value);
+    // Если имя меньше положенной длины, то невалидно
+    if(evt.target.value.length > 0 && evt.target.value.length < 3) {
       setAboutError('Слишком короткое описание. Нужно не меньше 3 символов');
       setAboutDirty(true);
-    } else if ( e.target.value.length == 0) {
+    } else if (evt.target.value.length == 0) {
       setAboutError('Вы пропустили поле')
     } else {
       setAboutError('');
