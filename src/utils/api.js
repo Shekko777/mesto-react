@@ -70,18 +70,9 @@ class Api {
     }).then(this._getResponce);
   }
 
-  // Лайк карточки.
-  likeCard(idCard) {
+  changeLikeCardStatus(idCard, status) {
     return fetch(`${this._url}/cards/${idCard}/likes`, {
-      method: "PUT",
-      headers: this._headers,
-    }).then(this._getResponce);
-  }
-
-  // Не лайк карточки.
-  unLikeCard(idCard) {
-    return fetch(`${this._url}/cards/${idCard}/likes`, {
-      method: "DELETE",
+      method: status ? "DELETE" : "PUT",
       headers: this._headers,
     }).then(this._getResponce);
   }

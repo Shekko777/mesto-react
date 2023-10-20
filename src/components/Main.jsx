@@ -1,7 +1,13 @@
+import React from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { CardsContext } from "../contexts/CardsContext";
 import avatarPreload from "../images/profile/avatar-preload.jpg";
 import Card from './Card';
 
-function Main({onEditAvatar, userAvatar, userName, userDescription, onEditProfile, onAddPlace, onCardClick, cards}) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onCardDelete}) {
+  const currentUserContext = React.useContext(CurrentUserContext);
+  const cardsContext = React.useContext(CardsContext);
+
   return (
     <main className="main">
       {/* PROFILE */}
@@ -15,13 +21,13 @@ function Main({onEditAvatar, userAvatar, userName, userDescription, onEditProfil
             >
               <img
                 className="profile__avatar"
-                src={userAvatar ? `${userAvatar}` : avatarPreload}
+                src={currentUserContext.avatar ? `${currentUserContext.avatar}` : avatarPreload}
                 alt="Аватар профиля"
               />
             </button>
             <div className="profile__description">
-              <h1 className="profile__title">{userName}</h1>
-              <p className="profile__subtitle">{userDescription}</p>
+              <h1 className="profile__title">{currentUserContext.name}</h1>
+              <p className="profile__subtitle">{currentUserContext.about}</p>
               <button
                 className="profile__edit-btn"
                 type="button"
@@ -40,8 +46,8 @@ function Main({onEditAvatar, userAvatar, userName, userDescription, onEditProfil
       {/*Elements */}
       <section className="elements" aria-label="Фотокарточки">
         <ul className="elements__list">
-          {cards.map(card => {
-            return <Card key={card._id} onCardClick={onCardClick} card={card} />
+          {cardsContext.map(card => {
+            return <Card key={card._id} handleButtonDelete={onCardDelete} handleLikeClick={onCardLike} onCardClick={onCardClick} card={card} />
         })}</ul>
       </section>
     </main>
@@ -49,3 +55,5 @@ function Main({onEditAvatar, userAvatar, userName, userDescription, onEditProfil
 }
 
 export default Main;
+
+// handleDeleteButton={onCardDelete}
