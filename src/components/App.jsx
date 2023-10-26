@@ -20,6 +20,7 @@ function App() {
   const [isImagePopup, setIsImagePopup] = React.useState(false); // Попап картинки
   const [cards, setCards] = React.useState([]); // Массив карточек для отображения
   const [selectedCard, setSelectedCard] = React.useState(null); // Карточка для открытия попапа/удаления
+  const [loggedIn, setLoggedIn] = React.useState(false) // Проверка залогиненности пользователя
 
    /*
     Стейт информации о пользователе.
