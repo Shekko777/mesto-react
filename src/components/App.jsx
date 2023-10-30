@@ -12,6 +12,7 @@ import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardsContext } from '../contexts/CardsContext';
 import Register from './Register';
+import Login from './Login';
 
 function App() {
   /* Стейт разных переменных */
@@ -210,13 +211,13 @@ function App() {
           <Header />
 
           {/* <!-- MAIN --> */}
-          {/* <Main onEditProfile={handleEditProfileClick} 
+          <Main onEditProfile={handleEditProfileClick} 
           onAddPlace={handleAddPlaceClick} 
           onEditAvatar={handleEditAvatarClick} 
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
           onConfirmDelete={handleConfirmPopup}
-          /> */}
+          />
 
           {/* <Register labelText="Регистрация" 
           buttonText="Зарегистрироваться" 
@@ -226,9 +227,15 @@ function App() {
           onChangeEmail={handleChangeEmail} 
           onChangePassword={handleChangePassword}/> */}
         
+          {/* <Login labelText="Вход"
+           buttonText="Войти"
+           email={email}
+           password={password}
+           onChangeEmail={handleChangeEmail}
+           onChangePassword={handleChangePassword} /> */}
 
           {/*  FOOTER */}
-          {/* <Footer /> */}
+          <Footer />
 
           {/* Попап редактирования профиля */}
           <PopupEditProfile closeTouchOverlay={handleClosePopupTouchOverlay} onUpdateUser={handleUpdateUser} name="type_edit" title="Редактировать профиль" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} isClose={handleCloseAllPopup} />
