@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -10,6 +11,7 @@ import PopupEditAvatar from './PopupEditAvatar';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardsContext } from '../contexts/CardsContext';
+import Register from './Register';
 
 function App() {
   /* Стейт разных переменных */
@@ -21,6 +23,19 @@ function App() {
   const [cards, setCards] = React.useState([]); // Массив карточек для отображения
   const [selectedCard, setSelectedCard] = React.useState(null); // Карточка для открытия попапа/удаления
   const [loggedIn, setLoggedIn] = React.useState(false) // Проверка залогиненности пользователя
+
+  // Инпуты данных для регистрации
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  
+  const handleChangeEmail = ({ target }) => {
+    setEmail(target.value);
+  }
+
+  const handleChangePassword = ({ target }) => {
+    setPassword(target.value);
+  }
 
    /*
     Стейт информации о пользователе.
@@ -90,7 +105,7 @@ function App() {
       handleCloseAllPopup();
     }
   }
-
+  
   /* Функция открытия картинки в попапе */
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -195,16 +210,25 @@ function App() {
           <Header />
 
           {/* <!-- MAIN --> */}
-          <Main onEditProfile={handleEditProfileClick} 
+          {/* <Main onEditProfile={handleEditProfileClick} 
           onAddPlace={handleAddPlaceClick} 
           onEditAvatar={handleEditAvatarClick} 
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
           onConfirmDelete={handleConfirmPopup}
-          />
+          /> */}
+
+          {/* <Register labelText="Регистрация" 
+          buttonText="Зарегистрироваться" 
+          bottomLink={true}  
+          email={email} 
+          password={password} 
+          onChangeEmail={handleChangeEmail} 
+          onChangePassword={handleChangePassword}/> */}
+        
 
           {/*  FOOTER */}
-          <Footer />
+          {/* <Footer /> */}
 
           {/* Попап редактирования профиля */}
           <PopupEditProfile closeTouchOverlay={handleClosePopupTouchOverlay} onUpdateUser={handleUpdateUser} name="type_edit" title="Редактировать профиль" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} isClose={handleCloseAllPopup} />

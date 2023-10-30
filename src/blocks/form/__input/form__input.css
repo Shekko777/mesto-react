@@ -1,0 +1,26 @@
+.form__input {
+  font-size: 14px;
+  padding-bottom: 15px;
+  color: #fff;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #ccc;
+}
+
+.form__input::placeholder {
+  color: #ccc;
+}
+
+.form__input:not(:last-child) {
+  margin-bottom: 30px;
+}
+
+.form__input:focus {
+  outline: none;
+  border-color: #fff;
+}
+
+.form__input:focus::placeholder {
+  color: #fff;
+}

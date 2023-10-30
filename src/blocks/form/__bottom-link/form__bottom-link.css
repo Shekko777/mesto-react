@@ -1,0 +1,10 @@
+.form__bottom-link {
+  position: relative;
+  text-decoration: none;
+  color: #fff;
+  transition: opacity 0.1s;
+}
+
+.form__bottom-link:hover {
+  opacity: 0.85;
+}
