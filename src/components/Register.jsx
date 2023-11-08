@@ -17,6 +17,7 @@ const Register = ({labelText, buttonText, onClickLink, handleRegister}) => {
     setPassword(target.value);
   }
 
+  // Отправка формы
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
     handleRegister({email, password});
@@ -24,8 +25,10 @@ const Register = ({labelText, buttonText, onClickLink, handleRegister}) => {
     setPassword('');
   }
   
+  // Регулярка для проверки E-mail
   let re = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
   
+  // Проверка валидности при заполнении полей
   React.useEffect(() => {
     if(email.length !== 0 && password.length !== 0 && re.test(String(email).toLowerCase())) {
       setDisabled(false);

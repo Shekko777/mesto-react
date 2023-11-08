@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Main from "./Main";
 import ImagePopup from "./ImagePopup";
@@ -14,8 +14,8 @@ import Register from './Register';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
-import tooltipResolveImg from '../images/tooltip/resolve.png';
-import tooltipRejectImg from '../images/tooltip/reject.png';
+import tooltipResolveImg from '../images/tooltip/resolve.png'; // Картинка успешного запроса
+import tooltipRejectImg from '../images/tooltip/reject.png'; // Картинка ошибки
 
 function App() {
   const navigate = useNavigate();
@@ -86,7 +86,6 @@ function App() {
   const getContent = () => {
     const token = localStorage.getItem('token')
     auth.getContent(token).then(res => {
-      console.log(res.data._id)
       navigate('/', {replace: true});
       setLoggedIn(true);
       setEmail(res.data.email);
@@ -130,7 +129,6 @@ function App() {
   function handleConfirmPopup(card) {
     setIsConfirmPopup(true);
     setSelectedCard(card);
-    
   }
   /*
   Отправка попапа подтверждения. 
@@ -233,7 +231,7 @@ function App() {
       });
       setCards(dataCards)
     }).catch(err => console.log(`Oops: Не удалось получить данные, ошибка: ${err}`));
-    getContent();
+    getContent(); // Проверка авторизованности при заходе на сайт
   }, []);
 
   /*

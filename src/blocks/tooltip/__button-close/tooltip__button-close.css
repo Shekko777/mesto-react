@@ -9,6 +9,6 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  background-image: url("./images/popup/close-btn.svg");
+  background-image: url("../../../images/popup/close-btn.svg");
   cursor: pointer;
 }

@@ -17,6 +17,7 @@ const Login = ({ labelText, buttonText, onClickLink, onLogin }) => {
     setPassword(target.value);
   }
 
+  // Отправка формы
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
     onLogin({email, password});
@@ -24,8 +25,10 @@ const Login = ({ labelText, buttonText, onClickLink, onLogin }) => {
     setPassword('');
   }
 
+  // регулярка для E-mail
   let re = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
+  // Проверка валидности при заполнении полей
   React.useEffect(() => {
     if(email.length !== 0 && password.length !== 0 && re.test(String(email).toLowerCase())) {
       setDisabled(false);
@@ -33,8 +36,6 @@ const Login = ({ labelText, buttonText, onClickLink, onLogin }) => {
       setDisabled(true);
     }
   }, [email, password])
-
-  
 
   return (
     <>
