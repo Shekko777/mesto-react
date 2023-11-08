@@ -10,6 +10,9 @@
 /* Header */
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
+@import url(./blocks/header/__container/header__container.css);
+@import url(./blocks/header/__email/header__email.css);
+@import url(./blocks/header/__button/header__button.css);
 
 /* profile */
 @import url(./blocks/profile/__wrapper/profile__wrapper.css);
@@ -68,5 +71,73 @@
 @import url(./blocks/form/__label/form__label.css);
 @import url(./blocks/form/__input/form__input.css);
 @import url(./blocks/form/__button/form__button.css);
+@import url(./blocks/form/__button/_disabled/form__button_disabled.css);
 @import url(./blocks/form/__bottom-text/form__bottom-text.css);
 @import url(./blocks/form/__bottom-link/form__bottom-link.css);
+
+.tooltip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s;
+}
+
+.tooltip_opened {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  opacity: 0.5;
+}
+
+.tooltip__container {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  border-radius: 10px;
+  padding: 60px 36px;
+}
+
+.tooltip__button-close {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("./images/popup/close-btn.svg");
+  cursor: pointer;
+}
+
+.tooltip__img {
+  margin-bottom: 32px;
+}
+
+.tooltip__text {
+  margin: 0;
+  font-weight: 900;
+  max-width: 358px;
+  text-align: center;
+}

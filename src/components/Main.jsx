@@ -1,14 +1,22 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { CardsContext } from "../contexts/CardsContext";
 import avatarPreload from "../images/profile/avatar-preload.jpg";
 import Card from './Card';
+import Header from "./Header";
+import Footer from "./Footer";
 
-function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onConfirmDelete}) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onConfirmDelete, email, onSignOut}) {
   const currentUserContext = React.useContext(CurrentUserContext);
   const cardsContext = React.useContext(CardsContext);
 
   return (
+    <>
+    <Header>
+      <p className="header__email">{email}</p>
+      <Link onClick={onSignOut} className="header__button" to="/sign-in">Выйти</Link>
+    </Header>
     <main className="main">
       {/* PROFILE */}
       <section className="profile">
@@ -51,6 +59,8 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike,
         })}</ul>
       </section>
     </main>
+    <Footer />
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 .header__logo {
   width: 142px;
   height: 33px;
-  padding: 45px 0 33px;
+  padding: 33px 0;
   object-fit: cover;
   object-position: center;
 }

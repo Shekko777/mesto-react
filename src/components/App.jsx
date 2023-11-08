@@ -1,41 +1,96 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Header from "./Header";
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Main from "./Main";
-import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import PopupEditProfile from './PopupEditProfile';
 import PopupAddNewCard from "./PopupAddNewCard";
 import PopupWithConfirm from './PopupWithConfirm';
 import PopupEditAvatar from './PopupEditAvatar';
 import api from '../utils/api';
+import auth from '../utils/auth';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardsContext } from '../contexts/CardsContext';
 import Register from './Register';
 import Login from './Login';
+import ProtectedRoute from './ProtectedRoute';
+import InfoTooltip from './InfoTooltip';
+import tooltipResolveImg from '../images/tooltip/resolve.png';
+import tooltipRejectImg from '../images/tooltip/reject.png';
 
 function App() {
+  const navigate = useNavigate();
+
   /* Стейт разных переменных */
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false); // Попап редактирования профиля
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false); // Попап добавления места
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false); // Попап аватара 
   const [isConfirmPopup, setIsConfirmPopup] = React.useState(false); // Попап подтверждения 
   const [isImagePopup, setIsImagePopup] = React.useState(false); // Попап картинки
+  const [isTooltipPopupOpen, setIsTooltipPopupOpen] = React.useState(false); // Состояние открытия и закрытия тултипа
+  const [tooltipInfo, setTooltipInfo] = React.useState({
+    img: null,
+    text: '',
+  }) // Информация в тултипе
   const [cards, setCards] = React.useState([]); // Массив карточек для отображения
   const [selectedCard, setSelectedCard] = React.useState(null); // Карточка для открытия попапа/удаления
   const [loggedIn, setLoggedIn] = React.useState(false) // Проверка залогиненности пользователя
+  const [email, setEmail] = React.useState(''); // Почта юзера для отображения в хедере
 
-  // Инпуты данных для регистрации
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
 
-  
-  const handleChangeEmail = ({ target }) => {
-    setEmail(target.value);
+  // Функция авторизации
+  const handleSubmitLogin = ({email, password}) => {
+    auth.signIn(email, password).then(res => {
+      if(res.token) {
+        localStorage.setItem('token', res.token);
+        setEmail(email);
+        getContent();
+      }
+    }).catch(err => {
+      console.log(`Ошибка при авторизации: ${err}`)
+      setTooltipInfo({
+        img: tooltipRejectImg,
+        text: 'Неверный Email или пароль! Повторите попытку.',
+      })
+      setIsTooltipPopupOpen(true);
+    })
   }
 
-  const handleChangePassword = ({ target }) => {
-    setPassword(target.value);
+  // Функция регистрации
+  const handleSubmitRegister = ({email, password}) => {
+    auth.signUp(email, password).then(res => {
+      if(res.statusCode !== 400) {
+        setTooltipInfo({
+          img: tooltipResolveImg,
+          text: 'Вы успешно зарегистрировались!',
+        })
+        setIsTooltipPopupOpen(true);
+        navigate('/sign-in', {replace: true});
+      }
+    }).catch(err => {
+      console.log(`Ошибка при регистрации: ${err}`)
+      setTooltipInfo({
+        img: tooltipRejectImg,
+        text: 'Что-то пошло не так! Попробуйте ещё раз.',
+      })
+      setIsTooltipPopupOpen(true);
+    })
+  }
+
+  // Функция выхода из профиля 
+  const handleSignOut = () => {
+    setLoggedIn(false);
+    localStorage.removeItem('token');
+  }
+
+  // Функция получения карточек и перехода на главную страницу
+  const getContent = () => {
+    const token = localStorage.getItem('token')
+    auth.getContent(token).then(res => {
+      console.log(res.data._id)
+      navigate('/', {replace: true});
+      setLoggedIn(true);
+      setEmail(res.data.email);
+    }).catch(err => console.log(`Вы не зарегистрированны: ${err}`))
   }
 
    /*
@@ -97,6 +152,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsImagePopup(false);
     setIsConfirmPopup(false);
+    setIsTooltipPopupOpen(false)
     setSelectedCard(null);
   }
 
@@ -175,9 +231,9 @@ function App() {
         id: dataUser._id,
         avatar: dataUser.avatar, 
       });
-
       setCards(dataCards)
-    }).catch(err => console.log(`Oops: Не удалось получить данные, ошибка: ${err}`))
+    }).catch(err => console.log(`Oops: Не удалось получить данные, ошибка: ${err}`));
+    getContent();
   }, []);
 
   /*
@@ -187,7 +243,7 @@ function App() {
   после отрабатывания с body удалиться событие
   */
   React.useEffect(() => {
-    if(isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopup || isConfirmPopup) {
+    if(isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopup || isConfirmPopup || isTooltipPopupOpen) {
       function handleCloseAllPopupTouchESC(evt) {
         if(evt.key === 'Escape'){
           handleCloseAllPopup();
@@ -198,9 +254,7 @@ function App() {
         document.removeEventListener('keydown', handleCloseAllPopupTouchESC);
       }
     }
-  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopup, isConfirmPopup])
-
-
+  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopup, isConfirmPopup, isTooltipPopupOpen])
 
   return (
     <>
@@ -208,34 +262,35 @@ function App() {
 
       <CurrentUserContext.Provider value={currentUser}>
         <CardsContext.Provider value={cards}>
-          <Header />
 
-          {/* <!-- MAIN --> */}
-          <Main onEditProfile={handleEditProfileClick} 
-          onAddPlace={handleAddPlaceClick} 
-          onEditAvatar={handleEditAvatarClick} 
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onConfirmDelete={handleConfirmPopup}
-          />
+          <Routes>
 
-          {/* <Register labelText="Регистрация" 
-          buttonText="Зарегистрироваться" 
-          bottomLink={true}  
-          email={email} 
-          password={password} 
-          onChangeEmail={handleChangeEmail} 
-          onChangePassword={handleChangePassword}/> */}
-        
-          {/* <Login labelText="Вход"
-           buttonText="Войти"
-           email={email}
-           password={password}
-           onChangeEmail={handleChangeEmail}
-           onChangePassword={handleChangePassword} /> */}
+            <Route path="/" element={<ProtectedRoute component={Main} loggedIn={loggedIn} onEditProfile={handleEditProfileClick} 
+              onAddPlace={handleAddPlaceClick} 
+              onEditAvatar={handleEditAvatarClick} 
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onConfirmDelete={handleConfirmPopup}
+              email={email}
+              onSignOut={handleSignOut} />} />
 
-          {/*  FOOTER */}
-          <Footer />
+            <Route path="/sign-up" element={
+              <Register labelText="Регистрация" 
+              buttonText="Зарегистрироваться" 
+              handleRegister={handleSubmitRegister}
+              />
+            } />
+
+            <Route path="/sign-in" element={
+              <Login labelText="Вход"
+              buttonText="Войти"
+              onLogin={handleSubmitLogin}
+              />
+            } />
+
+
+            <Route path="*" element={<Navigate to='/' replace />} />
+          </Routes>
 
           {/* Попап редактирования профиля */}
           <PopupEditProfile closeTouchOverlay={handleClosePopupTouchOverlay} onUpdateUser={handleUpdateUser} name="type_edit" title="Редактировать профиль" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} isClose={handleCloseAllPopup} />
@@ -251,6 +306,10 @@ function App() {
 
           {/* Попап с картинкой */}
           <ImagePopup closeTouchOverlay={handleClosePopupTouchOverlay} card={selectedCard} isOpen={isImagePopup} isClose={handleCloseAllPopup} />
+
+          {/* InfoTooltip */}
+          <InfoTooltip closeTouchOverlay={handleClosePopupTouchOverlay} img={tooltipInfo.img} text={tooltipInfo.text} isOpen={isTooltipPopupOpen} isClose={handleCloseAllPopup} />
+
         </CardsContext.Provider> 
       </CurrentUserContext.Provider>
       
